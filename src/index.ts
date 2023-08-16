@@ -59,6 +59,8 @@ export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
         if (typeof obj[key] === 'object'){
             if(obj[key] instanceof Array){
                 flat.push(`${spc} ${key}: ${obj[key].join('|')}`);
+            }else if(obj[key] instanceof Date){
+                flat.push(`${spc} ${key}: ${obj[key].toString()}`);
             }else{
                 flat.push(`${spc} ${key}->`);
                 objectToText(obj[key], flat, l+1);
