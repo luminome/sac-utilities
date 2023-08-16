@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "module": "CommonJS",
+    "lib": ["ES2022","dom"],
+    "declaration": true,
+    "removeComments": false,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "types": [
+      "node"],
+    "rootDir": "./src",
+    "outDir": "./build",
+    "allowJs": true
+    
+},
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
