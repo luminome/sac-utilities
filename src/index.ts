@@ -50,3 +50,20 @@ export const timer = (var_name:string):timer_model => {
     }
     return T
 }
+
+export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
+    const spc = '  '.repeat(l);
+    Object.keys(obj).forEach((key) => {
+        if (typeof obj[key] === 'object'){
+            if(obj[key] instanceof Array){
+                flat.push(`${spc} ${key}: ${obj[key].join('|')}`);
+            }else{
+                flat.push(`${spc} ${key}->`);
+                objectToText(obj[key], flat, l+1);
+            }
+        }else{
+            if(!(obj[key] instanceof Function)) flat.push(`${spc} ${key}: ${obj[key]}`);
+        }
+    });
+    return flat;
+}
