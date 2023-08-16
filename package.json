@@ -1,0 +1,14 @@
+{
+  "name": "utilities",
+  "version": "1.0.0",
+  "description": "basic re-usable utils (ts)",
+  "main": "index.ts",
+  "scripts": {
+    "test": "ts-node index.ts"
+  },
+  "author": "SAC",
+  "license": "ISC",
+  "dependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
