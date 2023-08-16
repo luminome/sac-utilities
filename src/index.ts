@@ -26,6 +26,7 @@ export function keyGen(len:number = 6): string {
 
 export type timer_model = {
     var_name: string,
+    T0: Date,
     T1: number;
     T2: number;
     start: Function;
@@ -43,6 +44,7 @@ export const timer = (var_name:string):timer_model => {
     }
     const T = {
         var_name: var_name,
+        T0: new Date(),
         T1: 0.0,
         T2: 0.0,
         start,
