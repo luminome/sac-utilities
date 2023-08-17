@@ -84,3 +84,5 @@ export const objAssignPartial = (target:any, obj:any):void => {
     });
 }
   
+
+export const setAttrs = (e:Element, a:any) => Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v as any));
