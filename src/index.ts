@@ -75,9 +75,10 @@ export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
 export const objAssignPartial = (target:any, obj:any):void => {
     Object.keys(obj).forEach((key) => {
         if (typeof obj[key] === 'object'){
-            objAssignPartial(obj[key], target[key]);
+            objAssignPartial(target[key], obj[key]);
         }else{
             target[key] = obj[key];
         }
     });
 }
+  
