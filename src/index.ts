@@ -55,7 +55,7 @@ export const timer = (var_name:string):timer_model => {
 
 export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
     const spc = '  '.repeat(l);
-    Object.keys(obj).forEach((key) => {
+    obj && Object.keys(obj).forEach((key) => {
         if (typeof obj[key] === 'object'){
             if(obj[key] instanceof Array){
                 flat.push(`${spc} ${key}: ${obj[key].join('|')}`);
@@ -75,7 +75,7 @@ export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
 }
 
 export const objAssignPartial = (target:any, obj:any):void => {
-    Object.keys(obj).forEach((key) => {
+    obj && Object.keys(obj).forEach((key) => {
         if (typeof obj[key] === 'object' && (obj[key] instanceof Object)){
             objAssignPartial(target[key], obj[key]);
         }else{
