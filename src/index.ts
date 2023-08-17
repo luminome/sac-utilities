@@ -76,7 +76,7 @@ export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
 
 export const objAssignPartial = (target:any, obj:any):void => {
     obj && Object.keys(obj).forEach((key) => {
-        if (typeof obj[key] === 'object' && (obj[key] instanceof Object)){
+        if (typeof obj[key] === 'object' && (obj[key] instanceof Object) && !(Array.isArray(obj[key]))){
             objAssignPartial(target[key], obj[key]);
         }else{
             !(obj[key] instanceof Function) && (target[key] = obj[key]);
