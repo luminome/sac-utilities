@@ -61,6 +61,8 @@ export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
                 flat.push(`${spc} ${key}: ${obj[key].join('|')}`);
             }else if(obj[key] instanceof Date){
                 flat.push(`${spc} ${key}: ${obj[key].toString()}`);
+            }else if(obj[key] instanceof Function){
+                flat.push(`${spc} ${key}: Function()`);
             }else{
                 flat.push(`${spc} ${key}->`);
                 objectToText(obj[key], flat, l+1);
@@ -74,10 +76,10 @@ export const objectToText = (obj:any, flat:string[] = [], l:number = 0) => {
 
 export const objAssignPartial = (target:any, obj:any):void => {
     Object.keys(obj).forEach((key) => {
-        if (typeof obj[key] === 'object'){
+        if (typeof obj[key] === 'object' && (obj[key] instanceof Object)){
             objAssignPartial(target[key], obj[key]);
         }else{
-            target[key] = obj[key];
+            !(obj[key] instanceof Function) && (target[key] = obj[key]);
         }
     });
 }
