@@ -14,7 +14,7 @@
       "node"],
     "rootDir": "./src",
     "outDir": "./build",
-    "allowJs": false
+    "allowJs": true
     
 },
   "include": [
