@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "basic re-usable utils (ts)",
   "main": "src/index.ts",
-  "type":"module",
   "scripts": {
     "test": "ts-node index.ts",
     "install": "tsc -d -p ."
