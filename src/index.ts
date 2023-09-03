@@ -53,7 +53,7 @@ export const timer = (var_name:string):timer_model => {
     return T
 }
 
-export const objectToText = (obj:any, flat:string[] = [], l:number = 0, hidden:string[] = []) => {
+export const objectToText = (obj:any, flat:string[] = [], l:number = 0, hidden:string[] = []):string[] => {
     const spc = '  '.repeat(l);
     obj && Object.keys(obj).forEach((key) => {
         if(!hidden.includes(key)){
