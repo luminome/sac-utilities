@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.timer = exports.keyGen = exports.formatBytes = exports.formatMs = void 0;
+exports.setAttrs = exports.objAssignPartial = exports.objectToText = exports.timer = exports.keyGen = exports.formatBytes = exports.formatMs = void 0;
 function formatMs(ms, decimals = 3) {
     if (!+ms)
         return '0 ms';
@@ -44,6 +44,7 @@ const timer = (var_name) => {
     }
     const T = {
         var_name: var_name,
+        T0: new Date(),
         T1: 0.0,
         T2: 0.0,
         start,
@@ -52,3 +53,44 @@ const timer = (var_name) => {
     return T;
 };
 exports.timer = timer;
+const objectToText = (obj, flat = [], l = 0, hidden = []) => {
+    const spc = '  '.repeat(l);
+    obj && Object.keys(obj).forEach((key) => {
+        if (!hidden.includes(key)) {
+            if (typeof obj[key] === 'object') {
+                if (obj[key] instanceof Array) {
+                    flat.push(`${spc} ${key}: ${obj[key].join(' | ')}`);
+                }
+                else if (obj[key] instanceof Date) {
+                    flat.push(`${spc} ${key}: ${obj[key].toString()}`);
+                }
+                else if (obj[key] instanceof Function) {
+                    flat.push(`${spc} ${key}: Function()`);
+                }
+                else {
+                    flat.push(`${spc} ${key}->`);
+                    (0, exports.objectToText)(obj[key], flat, l + 1);
+                }
+            }
+            else {
+                if (!(obj[key] instanceof Function))
+                    flat.push(`${spc} ${key}: ${obj[key]}`);
+            }
+        }
+    });
+    return flat;
+};
+exports.objectToText = objectToText;
+const objAssignPartial = (target, obj) => {
+    obj && Object.keys(obj).forEach((key) => {
+        if (typeof obj[key] === 'object' && (obj[key] instanceof Object) && !(Array.isArray(obj[key]))) {
+            (0, exports.objAssignPartial)(target[key], obj[key]);
+        }
+        else {
+            !(obj[key] instanceof Function) && (target[key] = obj[key]);
+        }
+    });
+};
+exports.objAssignPartial = objAssignPartial;
+const setAttrs = (e, a) => Object.entries(a).forEach(([k, v]) => e.setAttribute(k, v));
+exports.setAttrs = setAttrs;

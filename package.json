@@ -1,6 +1,6 @@
 {
   "name": "sac-utilities",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "basic re-usable utils (ts)",
   "main": "src/index.ts",
   "scripts": {
