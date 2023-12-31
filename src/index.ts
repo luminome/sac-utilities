@@ -1,3 +1,7 @@
+const DateWorker = new Date();
+
+export const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 export function formatMs(ms:number, decimals:number = 3): string {
     if (!+ms) return '0 ms';
     const dm = decimals < 0 ? 0 : decimals
@@ -19,6 +23,12 @@ export function formatBytes(bytes:number, decimals:number = 2): string {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
+
+export function formatLogDate(ms:number){
+    DateWorker.setTime(ms);
+    return DateWorker.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", hour12: false});
+}
+
 
 export function keyGen(len:number = 6): string {
     return (Math.random() + 1).toString(36).substring(2,2+len).toUpperCase();
