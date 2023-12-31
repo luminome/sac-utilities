@@ -2,6 +2,10 @@ const DateWorker = new Date();
 
 export const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+export function insertAfter(referenceNode:HTMLElement, newNode:HTMLElement) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
+
 export function formatMs(ms:number, decimals:number = 3): string {
     if (!+ms) return '0 ms';
     const dm = decimals < 0 ? 0 : decimals
@@ -98,3 +102,4 @@ export const objAssignPartial = (target:any, obj:any):void => {
   
 
 export const setAttrs = (e:Element, a:any) => Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v as any));
+export const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
