@@ -103,3 +103,8 @@ export const objAssignPartial = (target:any, obj:any):void => {
 
 export const setAttrs = (e:Element, a:any) => Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v as any));
 export const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
+
+export const avg = (arr:number[]) => {
+    const sum = arr.reduce((a, b) => a + b, 0);
+    return (sum / arr.length) || 0;
+}
