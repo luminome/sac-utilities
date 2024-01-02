@@ -1,4 +1,5 @@
 const DateWorker = new Date();
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 export const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -100,6 +101,14 @@ export const objAssignPartial = (target:any, obj:any):void => {
     });
 }
   
+
+
+export const createSVGElement = (name:string, props:any, ...classes:string[]) => {
+    const element = document.createElementNS(SVG_NS, name);
+    props && setAttrs(element,props);
+    classes && classes.forEach(c => element.classList.add(c));
+    return element;
+}
 
 export const setAttrs = (e:Element, a:any) => Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v as any));
 export const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
