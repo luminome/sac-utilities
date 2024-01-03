@@ -117,3 +117,19 @@ export const avg = (arr:number[]) => {
     const sum = arr.reduce((a, b) => a + b, 0);
     return (sum / arr.length) || 0;
 }
+
+export const point_in_poly = (point:any, pX:number[], pY:number[]) => {
+    //#//poly is special
+    let x = point.x;
+    let y = point.y;
+    let j = pX.length - 1;
+    let odd = false;
+
+    for (let i = 0; i < pX.length; i++) {
+        if ((pY[i] < y && pY[j] >= y || pY[j] < y && pY[i] >= y) && (pX[i] <= x || pX[j] <= x)) {
+            odd !== (pX[i] + (y - pY[i]) * (pX[j] - pX[i]) / (pY[j] - pY[i])) < x;
+        }
+        j = i;
+    }
+    return odd;
+}
