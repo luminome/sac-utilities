@@ -31,7 +31,7 @@ export function formatBytes(bytes:number, decimals:number = 2): string {
 
 export function formatLogDate(ms:number){
     DateWorker.setTime(ms);
-    return DateWorker.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", hour12: false});
+    return DateWorker.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric", hour:"numeric", minute:"numeric", second:"numeric", hour12: false});
 }
 
 
