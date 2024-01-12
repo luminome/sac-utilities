@@ -145,5 +145,9 @@ export const fsqrt = (d:number) => {
 }
 
 export const easeInOut = (t:number) => t > 0.5 ? 4 * Math.pow((t - 1), 3) + 1 : 4 * Math.pow(t, 3);
+
 export const norm = (min:number, val:number, max:number) => ((val - min) / (max - min)) || 0;
+
 export const interp = (a:number, t:number, b:number) => (a) - ((a - b) * t);
+
+
