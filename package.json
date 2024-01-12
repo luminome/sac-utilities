@@ -4,7 +4,7 @@
   "description": "basic re-usable utils (ts)",
   "main": "build",
   "scripts": {
-    "test": "ts-node index.ts",
+    "test": "ts-node src/test.ts",
     "install": "tsc -d -p ."
   },
   "author": "SAC",

@@ -151,3 +151,43 @@ export const norm = (min:number, val:number, max:number) => ((val - min) / (max 
 export const interp = (a:number, t:number, b:number) => (a) - ((a - b) * t);
 
 
+export type source = {
+    url:string,
+    size?:number | undefined,
+    status?:string | undefined,
+    type?:string | undefined,
+    data?:any | undefined,
+}
+
+export async function loader(src_list:source[], cb:any=null) {
+	const container:Promise<any>[] = [];
+	const opts = {
+	  headers: {
+		'mode':'cors'
+	  }
+	}
+
+	src_list.forEach(src => {
+		if (cb) cb(src.url,'start');
+
+		let ref = fetch(src.url, opts)
+		.then(response => {
+			src.size = Number(response.headers.get("content-length"));
+			return response.text()
+		})
+		.then((text) => {
+			if (cb) cb(src,'loaded');
+			return src.type === 'json' ? JSON.parse(text) : text;
+		})
+		.catch((error) => {
+            if (cb) cb(src,'error', error.status, error);
+			console.log(error.status, error);
+			return error;
+		})
+		container.push(ref);
+	});
+
+	const done = await Promise.all(container);
+	src_list.forEach((src,i) => src.data = done[i]);
+	return src_list;
+}
