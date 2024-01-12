@@ -191,3 +191,5 @@ export async function loader(src_list:source[], cb:any=null) {
 	src_list.forEach((src,i) => src.data = done[i]);
 	return src_list;
 }
+
+export const round_to_dec = (n:number, d:number) => Math.round(n*(10**d))/10**d || 0;
