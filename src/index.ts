@@ -133,3 +133,13 @@ export const point_in_poly = (point:any, pX:number[], pY:number[]) => {
     }
     return odd;
 }
+
+//✅ fast 1/square-root (dist);
+let buf = new ArrayBuffer(4), f32=new Float32Array(buf), u32=new Uint32Array(buf), x2, y;
+export const fsqrt = (d:number) => {
+  x2 = 0.5 * (f32[0] = d);
+  u32[0] = (0x5f3759df - (u32[0] >> 1));
+  y = f32[0];
+  y = y * ( 1.5 - ( x2 * y * y ) ); // 1st iteration
+  return y;
+}
