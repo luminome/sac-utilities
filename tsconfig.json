@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "types": ["node"],
-    "typeRoots": [ "./node_modules/@types" ],
+    "typeRoots": [ "./node_modules/@types", "../node_modules/@types", "../../node_modules/@types" ],
     "rootDir": "./src",
     "outDir": "./build",
     "allowJs": true
