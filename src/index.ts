@@ -1,3 +1,5 @@
+import { MapLike } from "typescript";
+
 const DateWorker = new Date();
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -244,3 +246,19 @@ export const f32_upres = (arr:Float32Array, shape:number[], axis:number, r:numbe
 
     return k_arr;
 }
+
+//https://stackoverflow.com/questions/69216046/javascript-how-to-get-the-size-in-bytes-of-a-map
+export const map_size_bytes = (oMap:Map<string | number, any>) => {
+    function replacer(key:number | string, value: any) {
+      if(value instanceof Map) {
+        return {
+          dataType: 'Map',
+          value: [...value],
+        };
+      } else {
+        return value;
+      }
+    }
+    return JSON.stringify(oMap, replacer).length;
+}
+
