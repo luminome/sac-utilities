@@ -193,3 +193,54 @@ export async function loader(src_list:source[], cb:any=null) {
 }
 
 export const round_to_dec = (n:number, d:number) => Math.round(n*(10**d))/10**d || 0;
+
+// not that simple...
+export const f32_slide = (arr:Float32Array, shape:number[], axis:number, r:number) => {
+    const mem = {m: new Float32Array(shape[axis])};
+    Math.sign(r) === -1 && (r = r+shape[axis]);
+    let xr, sd = shape[axis];
+    for(let i = 0; i < arr.length; i++){
+        xr = i % sd;
+        if(axis === 0){
+            mem.m[xr] = arr[i];
+            arr[i] = (xr + r < sd) ? arr[i + r] : mem.m[(xr + r) - sd];
+        }
+    }
+    delete mem.m;
+}
+
+//not very elegant looking..
+export const f32_upres = (arr:Float32Array, shape:number[], axis:number, r:number) => {
+    const s = [...shape];
+    const [sx, sy] = [...s];
+    s[axis] *= r;
+    const i_siz = (s[0] * s[1]);
+    const k_arr = new Float32Array(i_siz);
+    let a, b, c, xr, xrm, h=-(r-1);
+
+    for(let i = 0; i < arr.length; i++){
+        xr = i % sx;
+        xr === (0) && (h += (r-1));
+        xrm = i - xr; /// intervals of sx
+
+        if(axis === 0){
+            a = arr[xrm + xr];
+            b = arr[xrm + xr + 1] || arr[xrm];
+            for(let m = 0; m < r; m++){
+                c = interp(a, m/r, b);
+                k_arr[xrm*r + xr*r + m] = c;
+            }
+        }
+
+        if(axis === 1){
+            a = arr[i];
+            b = arr[i + sx] || arr[xr];
+            for(let m = 0; m < r; m++){
+                c = interp(a, m/r, b);
+                k_arr[i + sx*h + m*sx] = c;
+            }
+        }
+    }
+
+    return k_arr;
+}
