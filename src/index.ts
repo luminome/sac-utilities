@@ -116,11 +116,7 @@ export const createSVGElement = (name:string, props:any, ...classes:string[]) =>
 export const setAttrs = (e:Element, a:any) => Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v as any));
 export const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
 
-export const avg = (arr:number[]) => {
-    const sum = arr.reduce((a, b) => a + b, 0);
-    return (sum / arr.length) || 0;
-}
-
+//✅ POLYGONAL BRUTALITY
 export const point_in_poly = (point:any, pX:number[], pY:number[]) => {
     //#//poly is special
     let x = point.x;
@@ -136,6 +132,70 @@ export const point_in_poly = (point:any, pX:number[], pY:number[]) => {
     }
     return odd;
 }
+
+//✅ POLYGONAL BRUTALITY
+export const poly_to_bez = (pd:number[][], smooth:number=1.0) => {
+    // https://stackoverflow.com/questions/15691499/how-do-i-draw-a-closed-curve-over-a-set-of-points
+    // http://www.elvenprogrammer.org/projects/bezier/reference/index.html
+    // Assume we need to calculate the control
+    // points between (x1,y1) and (x2,y2).
+    // Then x0,y0 - the previous vertex,
+    //      x3,y3 - the next one.
+
+    let ni, x0, y0, x1, y1, x2, y2, x3, y3, xc1, yc1, xc2, yc2, xc3, yc3, len1, len2, len3, k1, k2, xm1, xm2, ym1, ym2, ctrl1_x, ctrl1_y, ctrl2_x, ctrl2_y;
+    const ar_set = [];
+    console.warn('pd.length', pd.length);
+    
+    const fluch = (n:number) => {
+        if(n < 0) return pd.length-1;
+        if(n >= pd.length) return n - (pd.length);
+        return n;
+    }
+
+    for(let i = 0; i < pd.length; i++){ // polydata is tuples
+        x0 = pd[fluch(i-1)][0];
+        y0 = pd[fluch(i-1)][1];
+        x1 = pd[i][0];
+        y1 = pd[i][1];
+        x2 = pd[fluch(i+1)][0];
+        y2 = pd[fluch(i+1)][1];
+        x3 = pd[fluch(i+2)][0];
+        y3 = pd[fluch(i+2)][1];
+
+        xc1 = (x0 + x1) / 2.0;
+        yc1 = (y0 + y1) / 2.0;
+        xc2 = (x1 + x2) / 2.0;
+        yc2 = (y1 + y2) / 2.0;
+        xc3 = (x2 + x3) / 2.0;
+        yc3 = (y2 + y3) / 2.0;
+
+        len1 = 1 / fsqrt((x1-x0) * (x1-x0) + (y1-y0) * (y1-y0));
+        len2 = 1 / fsqrt((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1));
+        len3 = 1 / fsqrt((x3-x2) * (x3-x2) + (y3-y2) * (y3-y2));
+
+        k1 = len1 / (len1 + len2);
+        k2 = len2 / (len2 + len3);
+
+        xm1 = xc1 + (xc2 - xc1) * k1;
+        ym1 = yc1 + (yc2 - yc1) * k1;
+        xm2 = xc2 + (xc3 - xc2) * k2;
+        ym2 = yc2 + (yc3 - yc2) * k2;
+
+        // Resulting control points. Here smooth_value is mentioned
+        // above coefficient K whose value should be in range [0...1].
+        ctrl1_x = xm1 + (xc2 - xm1) * smooth + x1 - xm1;
+        ctrl1_y = ym1 + (yc2 - ym1) * smooth + y1 - ym1;
+        ctrl2_x = xm2 + (xc2 - xm2) * smooth + x2 - xm2;
+        ctrl2_y = ym2 + (yc2 - ym2) * smooth + y2 - ym2;
+
+        // ar_set.push([x1,y1,ctrl1_x,ctrl1_y,ctrl2_x,ctrl2_y,x2,y2]);
+        ar_set.push({type:'C',values:[ctrl1_x, ctrl1_y, ctrl2_x, ctrl2_y, x2, y2]});
+    }
+
+    return ar_set;
+
+}
+
 
 //✅ fast 1/square-root (dist);
 let buf = new ArrayBuffer(4), f32=new Float32Array(buf), u32=new Uint32Array(buf), x2, y;
@@ -299,3 +359,5 @@ export const map_size_bytes = (oMap:Map<string | number, any>) => {
 }
 
 export const zpad = (n:number,i:number=2) => n.toString().padStart(i,'0');
+
+export const avg = (n:number[]) => (n.reduce((a, b) => a + b, 0) / n.length) || 0;
