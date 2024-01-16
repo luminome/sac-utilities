@@ -70,23 +70,24 @@ export const timer = (var_name:string):timer_model => {
     return T
 }
 
-export const objectToText = (obj:any, flat:string[] = [], l:number = 0, hidden:string[] = []):string[] => {
+export const objectToText = (obj:any, prefix:boolean = false, flat:string[] = [], l:number = 0, hidden:string[] = []):string[] => {
     const spc = '  '.repeat(l);
     obj && Object.keys(obj).forEach((key) => {
         if(!hidden.includes(key)){
+            let p = prefix ? `${spc} ${key}: ` : '';
             if (typeof obj[key] === 'object'){
                 if(obj[key] instanceof Array){
-                    flat.push(`${spc} ${key}: ${obj[key].join(' | ')}`);
+                    flat.push(`${p}${obj[key].join(' | ')}`);
                 }else if(obj[key] instanceof Date){
-                    flat.push(`${spc} ${key}: ${obj[key].toString()}`);
+                    flat.push(`${p}${obj[key].toString()}`);
                 }else if(obj[key] instanceof Function){
-                    flat.push(`${spc} ${key}: Function()`);
+                    flat.push(`${p}Function()`);
                 }else{
-                    flat.push(`${spc} ${key}->`);
-                    objectToText(obj[key], flat, l+1);
+                    flat.push(`${p}`);
+                    objectToText(obj[key], prefix, flat, l+1);
                 }
             }else{
-                if(!(obj[key] instanceof Function)) flat.push(`${spc} ${key}: ${obj[key]}`);
+                if(!(obj[key] instanceof Function)) flat.push(`${p}${obj[key]}`);
             }
         }
     });
