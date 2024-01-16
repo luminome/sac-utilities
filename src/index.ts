@@ -144,7 +144,6 @@ export const poly_to_bez = (pd:number[][], smooth:number=1.0) => {
 
     let ni, x0, y0, x1, y1, x2, y2, x3, y3, xc1, yc1, xc2, yc2, xc3, yc3, len1, len2, len3, k1, k2, xm1, xm2, ym1, ym2, ctrl1_x, ctrl1_y, ctrl2_x, ctrl2_y;
     const ar_set = [];
-    console.warn('pd.length', pd.length);
     
     const fluch = (n:number) => {
         if(n < 0) return pd.length-1;
