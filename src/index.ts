@@ -360,3 +360,42 @@ export const map_size_bytes = (oMap:Map<string | number, any>) => {
 export const zpad = (n:number,i:number=2) => n.toString().padStart(i,'0');
 
 export const avg = (n:number[]) => (n.reduce((a, b) => a + b, 0) / n.length) || 0;
+
+export const dater = () => {
+    
+    const date_opt:any = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        // timeZone: "UTC"
+    };
+
+    const time_opt:any = {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+        // timeZone: "UTC"
+        // timeZoneName: "short"
+    };
+
+    const date_from = (tm_s:number=null) => {
+        tm_s && D.obj.setTime(tm_s*1000);
+        return `${D.fmt_date.format(D.obj)} ${D.fmt_time.format(D.obj)} GMT`;
+    }
+
+    const time_from = (tm_s:number=null) => {
+        tm_s && D.obj.setTime(tm_s*1000);
+        return `${D.fmt_time.format(D.obj)} GMT`;
+    }
+
+    const D = {
+        obj: new Date(),
+        fmt_date: new Intl.DateTimeFormat("en-us", date_opt),
+        fmt_time: new Intl.DateTimeFormat("en-us", time_opt),
+        date_from,
+        time_from
+    }
+
+    return D;
+}
