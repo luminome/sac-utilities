@@ -263,3 +263,4 @@ export const map_size_bytes = (oMap:Map<string | number, any>) => {
     return JSON.stringify(oMap, replacer).length;
 }
 
+const zpad = (n:number,i:number=2) => n.toString().padStart(i,'0');
