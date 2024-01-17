@@ -196,6 +196,89 @@ export const poly_to_bez = (pd:number[][], smooth:number=1.0) => {
 }
 
 
+type data_object = {
+    data: Float32Array,
+    w: number,
+    h: number
+}
+
+//https://fiveko.com/gaussian-filter-in-pure-javascript/
+//✅ POLYGONAL BRUTALITY
+export const gauss = {
+    makeGaussKernel(sigma:number){
+        const GAUSS_KERN = 6.0;
+        const dim:number = ~~(Math.max(3.0, GAUSS_KERN * sigma));
+        const sqrtSigmaPi2 = Math.sqrt(Math.PI * 2.0) * sigma;
+        const s2 = 2.0 * sigma * sigma;
+        let sum = 0.0;
+
+        const kernel = new Float32Array(dim - Number!(dim & 1)); // Make it odd number
+        const half = ~~(kernel.length / 2);
+        for (let j = 0, i = -half; j < kernel.length; i++, j++) {
+            kernel[j] = Math.exp(-(i * i) / (s2)) / sqrtSigmaPi2;
+            sum += kernel[j];
+        }
+        // Normalize the gaussian kernel to prevent image darkening/brightening
+        for (let i = 0; i < dim; i++) {
+            kernel[i] /= sum;
+        }
+        return kernel;
+    },
+    gauss_internal(data_object:data_object, kernel:Float32Array) {
+        const data = data_object.data;
+        const w = data_object.w;
+        const h = data_object.h;
+        const buff = new Uint8Array(w * h);
+        const mk = Math.floor(kernel.length / 2);
+        const kl = kernel.length;
+
+        // First step process columns
+        for (let j = 0, hw = 0; j < h; j++, hw += w) {
+            for (let i = 0; i < w; i++) {
+                let sum = 0;
+                for (let k = 0; k < kl; k++) {
+                    let col = i + (k - mk);
+                    col = (col < 0) ? 0 : ((col >= w) ? w - 1 : col);
+                    sum += data[(hw + col)] * kernel[k];
+                }
+                buff[hw + i] = sum;
+            }
+        }
+        // Second step process rows
+        for (let j = 0, offset = 0; j < h; j++, offset += w) {
+            for (let i = 0; i < w; i++) {
+                let sum = 0;
+                for (let k = 0; k < kl; k++) {
+                    let row = j + (k - mk);
+                    row = (row < 0) ? 0 : ((row >= h) ? h - 1 : row);
+                    sum += buff[(row * w + i)] * kernel[k];
+                }
+                data[(j * w + i)] = sum;
+            }
+        }
+    }
+    // filter(grid, sigma:number){
+    //     let raw = new Float32Array(grid.length*grid[0].length);
+
+    //     for (let i=0;i<grid.length;i++){
+    //         for (let j=0;j<grid[i].length;j++) {
+    //             raw[i*grid[0].length+j] = grid[i][j];
+    //         }
+    //     }
+
+    //     const data_object:data_object = {
+    //         data: raw,
+    //         w:grid[0].length,
+    //         h:grid.length
+    //     }
+
+    //     const kernel = gauss.makeGaussKernel(sigma);
+    //     gauss.gauss_internal(data_object, kernel, 0, false);
+    //     return data_object;
+    // }
+}
+
+
 //✅ fast 1/square-root (dist);
 let buf = new ArrayBuffer(4), f32=new Float32Array(buf), u32=new Uint32Array(buf), x2, y;
 export const fsqrt = (d:number) => {
